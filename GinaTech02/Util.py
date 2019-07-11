@@ -1,6 +1,9 @@
-import numpy as np
-import GinaTech02.Config as cfg
 import datetime
+
+import numpy as np
+
+import GinaTech02.Config as cfg
+
 
 def toFloat(input):
     a = 0

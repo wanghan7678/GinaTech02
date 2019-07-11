@@ -1,6 +1,8 @@
 from __future__ import unicode_literals, absolute_import
-from sqlalchemy.ext.declarative import declarative_base
+
 from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+
 ModelBase = declarative_base()
 
 class Usstock_item(ModelBase):

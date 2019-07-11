@@ -1,7 +1,12 @@
+import threading
+
 import numpy as np
-import GinaTech02.Usstock_dao as dbo
+
 import GinaTech02.Usstock_cal as ucal
+import GinaTech02.Usstock_dao as dbo
 import GinaTech02.Util as util
+
+lock = threading.Lock()
 
 def toStandard(input):
     array = np.array(input)
@@ -42,6 +47,7 @@ def get_samplelists(symbolists, rows):
 
 
 def data_generator(min_index, max_index, shuffle=False, batch_size=32):
+    #global lock
     symbollist = get_symbolists()
     rowcnt = len(symbollist)
     if max_index is None:
@@ -61,17 +67,20 @@ def data_generator(min_index, max_index, shuffle=False, batch_size=32):
                 i = min_index
             rows = np.arange(i, min(i+batch_size, max_index))
             i+= len(rows)
-        list = get_samplelists(symbollist, rows)
-        samples = np.zeros((len(list), ucal.SAMPLE_DATASIZE, ucal.FEATURE_NUM))
-        targets = np.zeros((len(list),))
-        for j in range(0, len(list)):
-            try:
-                samples[j] = np.array(list[j][0])
-                targets[j] = util.toInt(list[j][1])
-            except ValueError as err:
-                print("Cannot broadcast input array into shape(60,26):  %s" %str(err))
-        samples = toStandard(samples)
-        yield samples, targets
+        if lock.acquire(1):
+            list = get_samplelists(symbollist, rows)
+
+            samples = np.zeros((len(list), ucal.SAMPLE_DATASIZE, ucal.FEATURE_NUM))
+            targets = np.zeros((len(list),))
+            for j in range(0, len(list)):
+                try:
+                    samples[j] = np.array(list[j][0])
+                    targets[j] = util.toInt(list[j][1])
+                except ValueError as err:
+                    print("Cannot broadcast input array into shape(60,26):  %s" %str(err))
+            samples = toStandard(samples)
+            lock.release()
+            yield samples, targets
 
 
 def get_stepsnum(start, end):

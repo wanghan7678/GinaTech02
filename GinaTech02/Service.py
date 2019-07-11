@@ -1,10 +1,11 @@
-import GinaTech02.Util as util
+import numpy as np
+
+import GinaTech02.Ann as ann
+import GinaTech02.Config as cfg
 import GinaTech02.TechCalculator as tc
 import GinaTech02.Usstock_dao as dao
 import GinaTech02.Usstock_odt as odt
-import GinaTech02.Config as cfg
-import GinaTech02.Ann as ann
-import numpy as np
+import GinaTech02.Util as util
 
 
 def insert_symbols():

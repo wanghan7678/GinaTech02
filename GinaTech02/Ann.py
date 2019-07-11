@@ -1,10 +1,12 @@
-from keras.models import Sequential
-from keras import layers
-from keras.optimizers import RMSprop
-import GinaTech02.DataGenerator as dg
-import GinaTech02.Config as cfig
-import GinaTech02.Usstock_cal as uscal
 import matplotlib.pyplot as plt
+from keras import layers
+from keras.models import Sequential
+from keras.optimizers import RMSprop
+
+import GinaTech02.Config as cfig
+import GinaTech02.DataGenerator as dg
+import GinaTech02.Usstock_cal as uscal
+
 
 def create_gru_model():
     model = Sequential()
@@ -19,8 +21,8 @@ def create_gru_model():
     return model
 
 def train_model(model):
-    history = model.fit_generator(dg.train_gen,steps_per_epoch=500,
-                                  epochs=20,
+    history = model.fit_generator(dg.train_gen,steps_per_epoch=20,
+                                  epochs=5,
                                   validation_data=dg.val_gen,
                                   validation_steps=dg.val_steps)
     return history
