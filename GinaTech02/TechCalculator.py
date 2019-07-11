@@ -1,6 +1,7 @@
-import GinaTech02.Util as util
 import numpy as np
 import talib
+
+import GinaTech02.Util as util
 
 DATASIZE = 60
 CALCSIZE = 200
@@ -16,15 +17,18 @@ MTM_PERIOD=12
 #in the sequence order:按照时间顺序，早的在前面。
 class Tech_Calculator(object):
     openlist, closelist, highlist, lowlist, vollist = [0],[0],[0],[0],[0]
+    symbol = ''
     length = 0
 
-    def set_dailydata(self,inputdata):
+    def set_dailydata(self,inputdata, symbol):
         self.openlist = np.array(inputdata['open'], dtype=float)
         self.closelist = np.array(inputdata['close'],dtype=float)
         self.highlist = np.array(inputdata['high'], dtype=float)
         self.lowlist = np.array(inputdata['low'], dtype=float)
         self.vollist = np.array(inputdata['volume'],dtype=float)
         self.length = util.toFloat(len(inputdata['close']))
+        self.symbol = symbol
+
 
     #the latest time data is on the top
     def get_obv(self):

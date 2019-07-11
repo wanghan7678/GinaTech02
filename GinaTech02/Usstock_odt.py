@@ -1,8 +1,10 @@
-from opendatatools import usstock
 from datetime import datetime
+
+from opendatatools import usstock
 from tiingo import TiingoClient
-import GinaTech02.Usstock_bean as stock
+
 import GinaTech02.Config as cfg
+import GinaTech02.Usstock_bean as stock
 import GinaTech02.Util as util
 
 

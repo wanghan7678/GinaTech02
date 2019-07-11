@@ -1,9 +1,8 @@
 import sqlalchemy
-import GinaTech02.Config as cf
-import GinaTech02.Util as util
-import GinaTech02.Usstock_bean as stock
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import or_
+
+import GinaTech02.Config as cf
+import GinaTech02.Usstock_bean as stock
 
 
 class dao_base(object):
