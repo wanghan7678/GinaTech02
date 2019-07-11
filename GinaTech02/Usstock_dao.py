@@ -1,5 +1,6 @@
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import func
 
 import GinaTech02.Config as cf
 import GinaTech02.Usstock_bean as stock
@@ -116,3 +117,13 @@ class dao_usstock_daily(dao_base):
             list.append(row.symbol)
         session.close()
         return list
+
+    def get_latesttradedate(self,symbol):
+        session = super().get_session()
+        result = session.query(func.max(stock.Usstock_daily.trade_date)).filter(stock.Usstock_daily.symbol==symbol).scalar()
+        return result
+
+class dao_usstock_result(dao_base):
+    def add_predict_result(self, item_list):
+        print("   Insert Result...")
+        super().add_itemlist(item_list)

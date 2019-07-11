@@ -144,9 +144,24 @@ class usstock_calresult:
                     raise Exception
         return list
 
+    def iflastone_ma5up10(self):
+        ma5 = self.__cal_data['ma5']
+        ma10 = self.__cal_data['ma10']
+        cross = False
+        i = self.__datasize -2
+        if ma5[i]<=ma10[i] and ma5[i+1]>ma10[i+1]:
+            cross = True
+        return cross
+
+
     def get_predict_samples(self):
-        sample = self.create_sample(self.__datasize-1)
-        return sample
+        self.__cal_indicators()
+        cross = self.iflastone_ma5up10()
+        if cross:
+            return self.create_sample(self.__datasize-1)
+        else:
+            return None
+
 
 
 

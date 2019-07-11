@@ -24,7 +24,7 @@ def train_model(model):
     history = model.fit_generator(dg.train_gen,steps_per_epoch=20,
                                   epochs=5,
                                   validation_data=dg.val_gen,
-                                  validation_steps=dg.val_steps)
+                                  validation_steps=20)
     return history
 
 
@@ -56,5 +56,7 @@ def predict_model(model):
     arr = dg.get_predictlist()
     samples = arr[0]
     symbols = arr[1]
+    print("start predict: total %d samples." %len(samples))
     pred = model.predict(samples)
+    print("finish predict.  predict: "+str(len(pred))+", symbols: "+str(len(symbols)))
     return [pred, symbols]

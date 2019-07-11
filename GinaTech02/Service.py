@@ -1,8 +1,8 @@
 import numpy as np
 
 import GinaTech02.Ann as ann
-import GinaTech02.Config as cfg
 import GinaTech02.TechCalculator as tc
+import GinaTech02.Usstock_bean as stk
 import GinaTech02.Usstock_dao as dao
 import GinaTech02.Usstock_odt as odt
 import GinaTech02.Util as util
@@ -48,7 +48,9 @@ def insert_alldaily_oneday(daystr):
             print(type(inst))
             print(inst.args)
             print(inst)
-
+def insert_predictresult(list):
+    pr_dao = dao.dao_usstock_result()
+    pr_dao.add_predict_result(list)
 
 def insert_alldaily_today():
     todaystr = util.get_today_datestr()
@@ -87,8 +89,25 @@ def ann_training():
     ann.save_model(model)
     ann.draw_plot(his)
 
+def get_latestdatefromdaiy(symbol):
+    sd_dao = dao.dao_usstock_daily()
+    dt = sd_dao.get_latesttradedate(symbol)
+    return dt
+
 #predict the latest
-def ann_predict():
+def ann_predict(weightfilepath):
     model = ann.create_gru_model()
-    model.load_weights(cfg.CONSTANT.WEIGHTS_FILEPATH)
+    model.load_weights(weightfilepath)
     rs = ann.predict_model(model)
+    pred = rs[0]
+    sym = rs[1]
+    list = []
+    for i in range(0, len(pred)):
+        item = stk.Usstock_annpredict()
+        item.symbol = str(sym[i])
+        item.trade_date =get_latestdatefromdaiy(item.symbol)
+        item.cal_date = util.get_today_datestr()
+        item.result = util.toFloat(pred[i])
+        item.comment = "GRU drop 0.4"
+        list.append(item)
+    insert_predictresult(list)

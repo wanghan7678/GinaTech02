@@ -56,3 +56,6 @@ def get_today_datestr():
     dt = datetime.datetime.now().strftime(cfg.CONSTANT.DATE_FORMAT_US)
     return dt
 
+def get_date(datestr):
+    dt = datetime.strptime(datestr, cfg.CONSTANT.DATE_FORMAT_US)
+    return dt
