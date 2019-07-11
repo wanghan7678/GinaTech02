@@ -98,13 +98,19 @@ def get_predictlist():
     symbolist = get_symbolists()
     stockdaily = dbo.dao_usstock_daily()
     samplelist, lablelist=[],[]
-    for sy in symbolist:
-        dict = stockdaily.get_onestocklists_alldays(sy)
-        if check_dataintegration(dict):
-            stockcal = ucal.usstock_calresult(sy)
-            stockcal.read_data(dict)
-            r = stockcal.get_predict_samples()
-            samplelist.append(r)
-            lablelist.append(sy)
-    list = [samplelist, lablelist]
+    if lock.acquire(1):
+        for sy in symbolist:
+            dict = stockdaily.get_onestocklists_alldays(sy)
+            if check_dataintegration(dict):
+                stockcal = ucal.usstock_calresult(sy)
+                stockcal.read_data(dict)
+                r = stockcal.get_predict_samples()
+                if r is not None:
+                    samplelist.append(r)
+                    lablelist.append(sy)
+    samples = np.zeros((len(samplelist), ucal.SAMPLE_DATASIZE, ucal.FEATURE_NUM))
+    for i in range(0, len(samplelist)):
+        samples[i] = samplelist[i]
+    list = [samples, lablelist]
+    lock.release()
     return list
