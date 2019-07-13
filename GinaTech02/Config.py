@@ -11,7 +11,6 @@ class CONSTANT(object):
     Database_Url2 = 'mysql+pymysql://programuser:Abcd1234@127.0.0.1:3306/gina_stock02?charset=utf8mb4'
     #Database_Url2 = 'mysql+pymysql://programuser:Abcd1234@167.86.97.204:3306/gina_stock02'
     LABEL_THRED = 0.05
-    MODELSAVED_PATH='ModelSaved/'
     DATASIZE=1200
     DATE_FORMAT_US="%Y-%m-%d"
     DATE_FORMAT_CN="%Y%m%d"
