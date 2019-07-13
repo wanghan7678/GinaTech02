@@ -20,12 +20,21 @@ def create_gru_model():
     model.compile(optimizer=RMSprop(),loss='binary_crossentropy')
     return model
 
-def train_model(model):
-    history = model.fit_generator(dg.train_gen,steps_per_epoch=20,
+def train_model(model, train_gen, val_gen):
+    history = model.fit_generator(train_gen,steps_per_epoch=20,
                                   epochs=5,
-                                  validation_data=dg.val_gen,
+                                  validation_data=val_gen,
                                   validation_steps=20)
     return history
+
+
+def train_model_us(model):
+    his = train_model(model, train_gen=dg.train_gen_us, val_gen=dg.val_gen_us)
+    return his
+
+def train_model_cn(model):
+    his = train_model(model, train_gen=dg.train_gen_cn, val_gen=dg.val_gen_cn)
+    return his
 
 
 def draw_plot(history):
@@ -52,8 +61,8 @@ def load_model(filepath):
     model = load_model(filepath)
     return model
 
-def predict_model(model):
-    arr = dg.get_predictlist()
+def predict_model_us(model):
+    arr = dg.get_predictlist_us()
     samples = arr[0]
     symbols = arr[1]
     print("start predict: total %d samples." %len(samples))

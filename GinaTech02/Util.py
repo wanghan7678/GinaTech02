@@ -56,6 +56,12 @@ def get_today_datestr():
     dt = datetime.datetime.now().strftime(cfg.CONSTANT.DATE_FORMAT_US)
     return dt
 
-def get_date(datestr):
-    dt = datetime.strptime(datestr, cfg.CONSTANT.DATE_FORMAT_US)
-    return dt
+def date_cn2us(datestr):
+    dt = datetime.datetime.strptime(datestr, cfg.CONSTANT.DATE_FORMAT_CN)
+    d = dt.strftime(cfg.CONSTANT.DATE_FORMAT_US)
+    return d
+
+def date_us2cn(datestr):
+    dt = datetime.datetime.strptime(datestr, cfg.CONSTANT.DATE_FORMAT_US)
+    d = dt.strftime(cfg.CONSTANT.DATE_FORMAT_CN)
+    return d
