@@ -29,12 +29,10 @@ def nowdatestr():
 
 def model_filepath():
     daystr = datetimestr()
-    #str = CONSTANT.MODELSAVED_PATH+daystr+"_model.h5"
-    str = daystr+"_model.h5"
+    str =daystr+"_model.h5"
     return str
 
 def weights_filepath():
     daystr = datetimestr()
-    #str = CONSTANT.MODELSAVED_PATH+daystr+"_weight.h5"
     str = daystr+"_weight.h5"
     return str

@@ -129,9 +129,9 @@ class usstock_calresult:
         self.__cal_indicators()
         crosses = self.cal_ma5up10crosses()
         list = []
-        s = self.__symbol +", length of input: " + str(
-            len(self.__input_data["close"])) + ", len of cal: " + str(len(self.__cal_data['pct_change']))
-        print("create samples: %s"%s)
+        #s = self.__symbol +", length of input: " + str(
+        #    len(self.__input_data["close"])) + ", len of cal: " + str(len(self.__cal_data['pct_change']))
+        #print("create samples: %s"%s)
         for i in crosses:
             if i >= 59 and i< self.__datasize-6:
                 try:
