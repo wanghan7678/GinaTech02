@@ -1,17 +1,11 @@
-import GinaTech02.DataGenerator as dg
+import tushare as tu
 
-'''
-stockdaily = dbo.dao_usstock_daily()
+import GinaTech02.Config as cfg
+import GinaTech02.Util as ut
 
-stockcal = cal.usstock_calresult('AAPL')
-dict = stockdaily.get_onestocklists_alldays('AAPL')
-stockcal.read_data(dict)
-stockcal.cal_indicators()
-'''
+pro = tu.pro_api(cfg.CONSTANT.Tushare_Token)
 
-dg = dg.val_gen
-i=0
-for samples, targets in dg:
-    print("iteration: %d"%i)
-    print("samples shape: %s" %str(samples.shape))
-    i+=1
+st_date = ut.to_cndate("20190701")
+df = pro.daily_basic(ts_code='000002.SZ', start_date=st_date, end_date='20190712')
+
+print(df)

@@ -2,7 +2,8 @@ import threading
 
 import numpy as np
 
-import GinaTech02.Usstock_cal as ucal
+import GinaTech02.Cnstock_dao as cdbo
+import GinaTech02.Stock_cal as scal
 import GinaTech02.Usstock_dao as dbo
 import GinaTech02.Util as util
 
@@ -15,10 +16,15 @@ def toStandard(input):
     array=np.nan_to_num(array)
     return array
 
-def get_symbolists():
+def get_symbolists_us():
     stockitem = dbo.dao_ussstock_item()
     symbol = stockitem.get_all_symbols()
     return symbol
+def get_symbolists_cn():
+    stockitem = cdbo.cnstock_item_dao()
+    symbol = stockitem.get_all_tscode()
+    return symbol
+
 
 def check_dataintegration(dict):
     rs = True
@@ -26,19 +32,33 @@ def check_dataintegration(dict):
         rs = False
     if dict['close'] is None:
         rs = False
-    if len(dict['close'])<ucal.SAMPLE_DATASIZE:
+    if len(dict['close'])<scal.SAMPLE_DATASIZE:
         rs = False
     return rs
 
 
-def get_samplelists(symbolists, rows):
+def get_samplelists_us(symbolists, rows):
     stockdaily = dbo.dao_usstock_daily()
     list = []
     for i in rows:
         s = symbolists[i]
         dict = stockdaily.get_onestocklists_alldays(s)
         if check_dataintegration(dict):
-            stockcal = ucal.usstock_calresult(s)
+            stockcal = scal.usstock_cal(s)
+            stockcal.read_data(dict)
+            r1 = stockcal.get_ma5up10_samplestargets()
+            for item in r1:
+                list.append(item)
+    return list
+
+def get_samplelists_cn(symbolists, rows):
+    stockdaily = cdbo.cnstock_daily_dao()
+    list = []
+    for i in rows:
+        s = symbolists[i]
+        dict = stockdaily.getonestocklists_alldays(s)
+        if check_dataintegration(dict):
+            stockcal = scal.cnstock_cal(s)
             stockcal.read_data(dict)
             r1 = stockcal.get_ma5up10_samplestargets()
             for item in r1:
@@ -46,9 +66,14 @@ def get_samplelists(symbolists, rows):
     return list
 
 
-def data_generator(min_index, max_index, shuffle=False, batch_size=32):
+
+def data_generator(min_index, max_index, shuffle=False, batch_size=32, country='us'):
     #global lock
-    symbollist = get_symbolists()
+    if country == 'us':
+        symbollist = get_symbolists_us()
+    else:
+        symbollist = get_symbolists_cn()
+
     rowcnt = len(symbollist)
     if max_index is None:
         max_index = rowcnt - 1
@@ -68,9 +93,12 @@ def data_generator(min_index, max_index, shuffle=False, batch_size=32):
             rows = np.arange(i, min(i+batch_size, max_index))
             i+= len(rows)
         if lock.acquire(1):
-            list = get_samplelists(symbollist, rows)
+            if country == 'us':
+                list = get_samplelists_us(symbollist, rows)
+            else:
+                list = get_samplelists_cn(symbollist, rows)
 
-            samples = np.zeros((len(list), ucal.SAMPLE_DATASIZE, ucal.FEATURE_NUM))
+            samples = np.zeros((len(list), scal.SAMPLE_DATASIZE, scal.FEATURE_NUM))
             targets = np.zeros((len(list),))
             for j in range(0, len(list)):
                 try:
@@ -83,34 +111,57 @@ def data_generator(min_index, max_index, shuffle=False, batch_size=32):
             yield samples, targets
 
 
-def get_stepsnum(start, end):
-    symlist = get_symbolists()
+def get_stepsnum_us(start, end):
+    symlist = get_symbolists_us()
     rows = range(start, end)
-    list = get_samplelists(symlist, rows)
+    list = get_samplelists_us(symlist, rows)
     r = len(list)
     return r
 
-train_gen = data_generator(900, 4000, shuffle=True)
-val_gen = data_generator(0, 900, shuffle=True)
-val_steps =1379 #for 0 to 900
-
-def get_predictlist():
-    symbolist = get_symbolists()
+train_gen_us = data_generator(900, 7000, shuffle=True, country='us')
+val_gen_us = data_generator(0, 900, shuffle=True, country='us')
+train_gen_cn = data_generator(600, 4000, shuffle=True, country='cn')
+val_gen_cn = data_generator(0, 600, shuffle=True, country='cn')
+val_steps_us =1379 #for 0 to 900
+val_steps_cn =1379
+def get_predictlist_us():
+    symbolist = get_symbolists_us()
     stockdaily = dbo.dao_usstock_daily()
     samplelist, lablelist=[],[]
     if lock.acquire(1):
         for sy in symbolist:
             dict = stockdaily.get_onestocklists_alldays(sy)
             if check_dataintegration(dict):
-                stockcal = ucal.usstock_calresult(sy)
+                stockcal = scal.usstock_cal(sy)
                 stockcal.read_data(dict)
                 r = stockcal.get_predict_samples()
                 if r is not None:
                     samplelist.append(r)
                     lablelist.append(sy)
-    samples = np.zeros((len(samplelist), ucal.SAMPLE_DATASIZE, ucal.FEATURE_NUM))
+    samples = np.zeros((len(samplelist), scal.SAMPLE_DATASIZE, scal.FEATURE_NUM))
     for i in range(0, len(samplelist)):
         samples[i] = samplelist[i]
     list = [samples, lablelist]
+    lock.release()
+    return list
+
+def get_predictlist_cn():
+    symbolist = get_predictlist_cn()
+    stockdaily = cdbo.cnstock_daily_dao()
+    samplelist, labellist = [],[]
+    if lock.acquire(1):
+        for sy in symbolist:
+            dict = stockdaily.get_onestocklists_alldays(sy)
+            if check_dataintegration(dict):
+                    stockcal = scal.cnstock_cal(sy)
+                    stockcal.read_data(dict)
+                    r = stockcal.get_predict_samples()
+                    if r is not None:
+                        samplelist.append(r)
+                        labellist.append(sy)
+    samples = np.zeros((len(samplelist), scal.SAMPLE_DATASIZE, scal.FEATURE_NUM))
+    for i in range(0, len(samplelist)):
+        samples[i] = samplelist[i]
+    list = [samples, labellist]
     lock.release()
     return list
