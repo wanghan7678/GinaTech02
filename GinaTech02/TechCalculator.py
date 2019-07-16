@@ -1,6 +1,8 @@
 import numpy as np
 import talib
 
+import GinaTech02.Cnstock_dao as cdbo
+import GinaTech02.Usstock_dao as udbo
 import GinaTech02.Util as util
 
 DATASIZE = 60
@@ -139,3 +141,26 @@ class Tech_Calculator(object):
         trange = talib.TRANGE(self.highlist, self.lowlist, self.closelist)
         trange = np.nan_to_num(trange)
         return trange
+
+    def get_turnover(self, country):
+        if country=='us':
+            stdb = udbo.dao_ussstock_item()
+            rs = stdb.get_marketcap(self.symbol)
+            marketcap = util.cmplx_toFloat(rs)
+            size = len(self.closelist)
+            tr = np.zeros(size, dtype=float)
+            for i in range(0, size):
+                if marketcap != 0:
+                    tr[i] = (self.closelist[i] * self.vollist[i]) / marketcap
+                else:
+                    tr[i] = 0
+            return tr
+        else:
+            stdb = cdbo.cnstock_daily_dao()
+            list = stdb.get_turnoverratio_list(self.symbol)
+            if len(list) == len(self.closelist):
+                return list
+            else:
+                print("turnover rate leng != datasize")
+                tr = np.zeros(len(self.closelist), dtype=float)
+                return  tr

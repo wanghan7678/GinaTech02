@@ -16,6 +16,7 @@ class CONSTANT(object):
     DATE_FORMAT_CN="%Y%m%d"
     WEIGHTS_FILEPATH='weight.h5'
 
+
 def datetimestr():
     now = datetime.datetime.now()
     str =now.strftime("%Y%m%d%H%m")
