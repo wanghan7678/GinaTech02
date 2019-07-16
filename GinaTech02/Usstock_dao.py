@@ -24,11 +24,12 @@ class dao_base(object):
         try:
             session.commit()
         except sqlalchemy.exc.IntegrityError as err:
-            print("Duplicated item....skipped.")
+            print("Duplicated item....skipped.        "+str(err))
         else:
             print("insert data...")
         finally:
             session.close()
+
 
 class dao_ussstock_item(dao_base):
 

@@ -1,11 +1,6 @@
-import tushare as tu
+import GinaTech02.Cnstock_odt as odt
 
-import GinaTech02.Config as cfg
-import GinaTech02.Util as ut
+list = odt.read_cnstock_daily('002413.SZ', start_date='2014-04-01', end_date='2014-04-20')
 
-pro = tu.pro_api(cfg.CONSTANT.Tushare_Token)
-
-st_date = ut.to_cndate("20190701")
-df = pro.daily_basic(ts_code='000002.SZ', start_date=st_date, end_date='20190712')
-
-print(df)
+for row in list:
+    print(row.trade_date)

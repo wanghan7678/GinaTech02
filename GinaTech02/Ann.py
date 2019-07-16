@@ -5,7 +5,8 @@ from keras.optimizers import RMSprop
 
 import GinaTech02.Config as cfig
 import GinaTech02.DataGenerator as dg
-import GinaTech02.Usstock_cal as uscal
+import GinaTech02.Stock_cal as scal
+import GinaTech02.Util as util
 
 
 def create_gru_model():
@@ -14,7 +15,7 @@ def create_gru_model():
                          dropout=0.1,
                          recurrent_dropout=0.4,
                          return_sequences=True,
-                         input_shape=(None, uscal.FEATURE_NUM)))
+                         input_shape=(None, scal.FEATURE_NUM)))
     model.add(layers.GRU(128,activation='relu',dropout=0.1,recurrent_dropout=0.4))
     model.add(layers.Dense(1, activation='sigmoid'))
     model.compile(optimizer=RMSprop(),loss='binary_crossentropy')
@@ -24,7 +25,7 @@ def train_model(model, train_gen, val_gen):
     history = model.fit_generator(train_gen,steps_per_epoch=20,
                                   epochs=5,
                                   validation_data=val_gen,
-                                  validation_steps=20)
+                                  validation_steps=5)
     return history
 
 
@@ -57,13 +58,25 @@ def save_model(model):
     model.save_weights(wtfilename, overwrite=True)
     model.save(mdfilename)
 
-def load_model(filepath):
-    model = load_model(filepath)
-    return model
+def save_model2(model, filename):
+    mdf = filename+"_"+util.get_today_datestr()+"_model.h5"
+    wtf = filename+"_"+util.get_today_datestr()+"_weight.h5"
+    model.save_weights(wtf, overwrite=True)
+    model.save(mdf)
+
 
 def predict_model_us(model):
     arr = dg.get_predictlist_us()
     samples = arr[0]
+    symbols = arr[1]
+    print("start predict: total %d samples." %len(samples))
+    pred = model.predict(samples)
+    print("finish predict.  predict: "+str(len(pred))+", symbols: "+str(len(symbols)))
+    return [pred, symbols]
+
+def predict_model_cn(model):
+    arr = dg.get_predictlist_cn()
+    samples=arr[0]
     symbols = arr[1]
     print("start predict: total %d samples." %len(samples))
     pred = model.predict(samples)

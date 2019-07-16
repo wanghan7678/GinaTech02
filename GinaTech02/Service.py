@@ -5,6 +5,7 @@ import urllib3
 
 import GinaTech02.Ann as ann
 import GinaTech02.Cnstock_dao as cdao
+import GinaTech02.Cnstock_odt as codt
 import GinaTech02.Cnstock_tushare as ctu
 import GinaTech02.Usstock_bean as stk
 import GinaTech02.Usstock_dao as dao
@@ -73,35 +74,74 @@ def insert_alldaily_today():
     insert_alldaily_oneday_us(todaystr)
     insert_alldaily_oneday_cn(todaystr)
 
-def ann_training():
+def ann_training_us():
     model = ann.create_gru_model()
-    his = ann.train_model(model)
-    ann.save_model(model)
+    his = ann.train_model_us(model)
+    ann.save_model2(model, filename='us_')
+    ann.draw_plot(his)
+def ann_training_cn():
+    model = ann.create_gru_model()
+    his = ann.train_model_cn(model)
+    ann.save_model2(model, filename='cn_')
     ann.draw_plot(his)
 
-def get_latestdatefromdaiy_us(symbol):
+def ann_training_us_wweight(weightfilepath):
+    model = ann.create_gru_model()
+    model.load_weights(weightfilepath)
+    history = ann.train_model_us(model)
+    ann.save_model2(model, filename="us")
+    ann.draw_plot(history)
+
+def ann_training_cn_wweight(weightfilepath):
+    model = ann.create_gru_model()
+    model.load_weights(weightfilepath)
+    history = ann.train_model_cn(model)
+    ann.save_model2(model, filename="cn")
+    ann.draw_plot(history)
+
+def get_latestdatefromdaily_us(symbol):
     sd_dao = dao.dao_usstock_daily()
     dt = sd_dao.get_latesttradedate(symbol)
     return dt
+def get_latestdatefromdaily_cn(symbol):
+    cd_dao = cdao.cnstock_daily_dao()
+    dt = cd_dao.get_latesttradedate(symbol)
+    return dt
 
 #predict the latest
-def ann_predict(weightfilepath):
+def ann_predict_us(weightfilepath):
     model = ann.create_gru_model()
     model.load_weights(weightfilepath)
-    rs = ann.predict_model(model)
+    rs = ann.predict_model_us(model)
     pred = rs[0]
     sym = rs[1]
     list = []
     for i in range(0, len(pred)):
         item = stk.Usstock_annpredict()
         item.symbol = str(sym[i])
-        item.trade_date =get_latestdatefromdaiy_us(item.symbol)
+        item.trade_date =get_latestdatefromdaily_us(item.symbol)
         item.cal_date = util.get_today_datestr()
         item.result = util.toFloat(pred[i])
         item.comment = "GRU drop 0.4"
         list.append(item)
     insert_predictresult_us(list)
 
+def ann_predict_cn(weightfilepath):
+    model = ann.create_gru_model()
+    model.load_weights(weightfilepath)
+    rs = ann.predict_model_cn(model)
+    pred = rs[0]
+    sym = rs[1]
+    list = []
+    for i in range(0, len(pred)):
+        item = stk.Usstock_annpredict()
+        item.symbol = str(sym[i])
+        item.trade_date = get_latestdatefromdaily_cn(item.symbol)
+        item.cal_date = util.get_today_datestr()
+        item.result = util.toFloat(pred[i])
+        item.comment = 'GRU drop 0.4'
+        list.append(item)
+        insert_predictresult_us(list)
 
 def insert_cnstocklist():
     stocklist = ctu.read_cnstocklist()
@@ -135,3 +175,17 @@ def insert_cnstock_all():
         i+=1
 
 
+def insert_cnstock_all_byodt():
+    stockdao = cdao.cnstock_item_dao()
+    dailydao = cdao.cnstock_daily_dao()
+    stocklist = stockdao.get_all_tscode()
+    existinglist = dailydao.get_existing_symbollist()
+    for i in range(0, len(stocklist)):
+        ts_code = stocklist[i]
+        if ts_code not in existinglist:
+            ts_code = ts_code.strip()
+            print("reading %s from opendatatool..."%ts_code)
+            list = codt.read_cnstock_daily(ts_code=ts_code, start_date='2014-01-01', end_date='2019-07-12')
+            print("insert %s into database..."%ts_code)
+            dailydao.insert_newlist(list)
+        i+=1

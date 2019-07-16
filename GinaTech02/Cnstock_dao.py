@@ -1,8 +1,7 @@
-import numpy as np
+from sqlalchemy.sql import func
 
 import GinaTech02.Cnstock_bean as stock
 import GinaTech02.Usstock_dao as usdao
-import GinaTech02.Util as util
 
 
 class cnstock_item_dao(usdao.dao_base):
@@ -25,7 +24,6 @@ class cnstock_item_dao(usdao.dao_base):
 class cnstock_daily_dao(usdao.dao_base):
     def insert_newlist(self, obj_list):
         list = obj_list
-        print("insert chinese stock daily and basic data into database....")
         super().add_itemlist(list)
 
     def get_existing_symbollist(self):
@@ -52,15 +50,15 @@ class cnstock_daily_dao(usdao.dao_base):
     def get_turnoverratio_list(self, ts_code):
         session = super().get_session()
         result = session.query(stock.Stock_daily.turnover_rate).filter(stock.Stock_daily.ts_code==ts_code).order_by(stock.Stock_daily.trade_date).all()
-        list = np.zeros(len(result), dtype=float)
-        for i in range(0, len(result)):
-            list[i] = util.toFloat(result.iat[i,0])
+        list = []
+        for row in result:
+            list.append(row.turnover_rate)
         session.close()
         return list
 
     def get_onestocklists_alldays(self, symbol):
         session = super().get_session()
-        result = session.query(stock.Stock_daily).filter(stock.Stock_daily.symbol==symbol).order_by(stock.Stock_daily.trade_date).all()
+        result = session.query(stock.Stock_daily).filter(stock.Stock_daily.ts_code==symbol).order_by(stock.Stock_daily.trade_date).all()
         lists = {}
         openl, highl, lowl, closel, volumel = [],[],[],[],[]
         for row in result:
@@ -68,7 +66,7 @@ class cnstock_daily_dao(usdao.dao_base):
             highl.append(row.high)
             lowl.append(row.low)
             closel.append(row.close)
-            volumel.append(row.volume)
+            volumel.append(row.vol)
         lists['open']=openl
         lists['high']=highl
         lists['low']=lowl
@@ -76,3 +74,8 @@ class cnstock_daily_dao(usdao.dao_base):
         lists['volume']=volumel
         session.close()
         return lists
+
+    def get_latesttradedate(self, symbol):
+        session = super().get_session()
+        result = session.query(func.max(stock.Stock_daily.trade_date)).filter(stock.Stock_daily.ts_code==symbol).scalar()
+        return result
