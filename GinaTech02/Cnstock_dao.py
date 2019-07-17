@@ -37,11 +37,11 @@ class cnstock_daily_dao(usdao.dao_base):
 
     def get_existing_symbollist2(self, trade_date):
         session = super().get_session()
-        result = session.query(stock.Stock_daily).distinct(stock.Stock_daily.symbol).filter(
+        result = session.query(stock.Stock_daily.ts_code).distinct(stock.Stock_daily.ts_code).filter(
             stock.Stock_daily.trade_date == trade_date).all()
         list = []
         for row in result:
-            s = str(row.symbol)
+            s = str(row.ts_code)
             s = s.strip()
             list.append(s)
         session.close()

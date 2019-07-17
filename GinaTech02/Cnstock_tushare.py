@@ -4,6 +4,7 @@ import GinaTech02.Cnstock_bean as stock
 import GinaTech02.Config as cfg
 import GinaTech02.Util as util
 
+TUSHARE_DAILYFIELDS='ts_code, trade_date, open, high, low, close, pct_chg, vol'
 
 def get_tushare_api():
     token = cfg.CONSTANT.Tushare_Token
@@ -33,9 +34,8 @@ def read_cnstocklist():
         list.append(item)
     return list
 
-def read_cnstock_daily(ts_code, start_date, end_date):
-    pro = get_tushare_api()
-    dt_daily = pro.daily(ts_code=ts_code, start_date=start_date, end_date=end_date, fields='ts_code, trade_date, open, high, low, close, pct_chg, vol')
+def create_item_fromdataset(dt_data):
+    dt_daily = dt_data
     list = []
     for i in range(0, len(dt_daily)):
         item = stock.Stock_daily()
@@ -53,6 +53,19 @@ def read_cnstock_daily(ts_code, start_date, end_date):
         list.append(item)
     return list
 
+
+def read_cnstock_daily2(trade_date):
+    pro = get_tushare_api()
+    dt_daily = pro.daily(trade_date=trade_date, fields=TUSHARE_DAILYFIELDS)
+    list = create_item_fromdataset(dt_daily)
+    return list
+
+def read_cnstock_daily(ts_code, start_date, end_date):
+    pro = get_tushare_api()
+    dt_daily = pro.daily(ts_code=ts_code, start_date=start_date, end_date=end_date, fields=True)
+    list = create_item_fromdataset(dt_daily)
+    return list
+
 def update_cnstock_basic(list, ts_code, start_date, end_date):
     pro = get_tushare_api()
     dt_basic = pro.daily_basic(ts_code=ts_code, start_date=start_date, end_date=end_date, fields='ts_code, trade_date, turnover_rate, volume_ratio, pe')
@@ -64,10 +77,20 @@ def update_cnstock_basic(list, ts_code, start_date, end_date):
                 item.pe = util.toFloat(dt_basic.iat[i,4])
     return list
 
+def update_cnstock_basic2(list, trade_date):
+    pro = get_tushare_api()
+    dt_basic = pro.daily_basic(ts_code='', trade_date=trade_date, fields='ts_code, trade_date, turnover_rate, volume_ratio, pe')
+    for i in range(0, len(dt_basic)):
+        for item in list:
+            if item.ts_code == dt_basic.iat[i,0] and item.trade_date == util.date_cn2us(dt_basic.iat[i,1]):
+                item.turnover_rate = util.toFloat(dt_basic.iat[i,2])
+                item.volume_ratio = util.toFloat(dt_basic.iat[i,3])
+                item.pe = util.toFloat(dt_basic.iat[i,4])
+    return list
 
-def read_cnstock_dailyandbasic(ts_code, trade_date):
-    list = read_cnstock_daily(ts_code, trade_date, trade_date)
-    list = update_cnstock_basic(list, ts_code, trade_date, trade_date)
+def read_cnstock_dailyandbasic2(daystr):
+    list = read_cnstock_daily2(trade_date=daystr)
+    list = update_cnstock_basic2(list, trade_date=daystr)
     return list
 
 def read_cnstock_dailyandbasic(ts_code, start_date, end_date):

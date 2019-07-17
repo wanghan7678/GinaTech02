@@ -23,7 +23,7 @@ def create_gru_model():
 
 def train_model(model, train_gen, val_gen):
     history = model.fit_generator(train_gen,steps_per_epoch=20,
-                                  epochs=5,
+                                  epochs=8,
                                   validation_data=val_gen,
                                   validation_steps=5)
     return history
