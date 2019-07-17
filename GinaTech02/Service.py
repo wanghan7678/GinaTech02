@@ -41,25 +41,25 @@ def insert_alldaily_oneday_us(daystr):
 def insert_alldaily_oneday_cn(daystr):
     st_dao = cdao.cnstock_item_dao()
     sd_dao = cdao.cnstock_daily_dao()
-    sym_list = st_dao.get_all_tscode()
     done_list = sd_dao.get_existing_symbollist2(daystr)
-    for i in range(0, len(sym_list)):
-        ts_code = sym_list[i]
-        try:
-            if i not in done_list:
-                daystr = util.date_us2cn()
-                dl = ctu.read_cnstock_dailyandbasic(ts_code, trade_date=daystr)
-                sd_dao.insert_newlist(dl)
-                print("inserted %s" % (i + daystr))
-            else:
-                print("%s already inserted...skipped." % str(i))
-        except (urllib3.exceptions.ReadTimeoutError, requests.exceptions.ReadTimeout) as err:
-            print(str(err))
-            print("sleeping... 300s")
-            time.sleep(300)
-            print("retry....")
-            i -= 1
-        i+=1
+    print("the length of donelist: %d" %len(done_list))
+    daystr = util.date_us2cn(daystr)
+    print("reading %s data from tushare..."%daystr)
+    dl = ctu.read_cnstock_daily2(daystr)
+    print("the length of read data: %d" %len(dl))
+    i = 0
+    to_add = []
+    for item in dl:
+        if item.ts_code not in done_list:
+            to_add.append(item)
+        else:
+            print("%s already exists in database...skipped." %item.ts_code)
+            i+=1
+    print("totally %d skipped." %i)
+    print("totally to be add: %d"%len(to_add))
+    print("insert into data base...")
+    sd_dao.insert_newlist(to_add)
+
 
 def insert_predictresult_us(list):
     pr_dao = dao.dao_usstock_result()
@@ -163,7 +163,11 @@ def insert_cnstock_all():
                 print("sleeping... 300s")
                 time.sleep(300)
                 print("retry....")
-                i = i-1
+                i -= 1
+            except Exception as inst:
+                print(type(inst))
+                print(inst.args)
+                print(inst)
         i+=1
 
 
