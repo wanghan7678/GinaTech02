@@ -118,8 +118,8 @@ def get_stepsnum_us(start, end):
     r = len(list)
     return r
 
-train_gen_us = data_generator(900, 7000, shuffle=True, country='us')
-val_gen_us = data_generator(0, 900, shuffle=True, country='us')
+train_gen_us = data_generator(500, 7000, shuffle=True, country='us')
+val_gen_us = data_generator(0, 500, shuffle=True, country='us')
 
 train_gen_cn = data_generator(10, 100, shuffle=True, country='cn')
 val_gen_cn = data_generator(0, 10, shuffle=True, country='cn')

@@ -59,10 +59,6 @@ def insert_alldaily_oneday_cn(daystr):
             time.sleep(300)
             print("retry....")
             i -= 1
-        except Exception as inst:
-            print(type(inst))
-            print(inst.args)
-            print(inst)
         i+=1
 
 def insert_predictresult_us(list):
@@ -167,11 +163,7 @@ def insert_cnstock_all():
                 print("sleeping... 300s")
                 time.sleep(300)
                 print("retry....")
-                i -= 1
-            except Exception as inst:
-                print(type(inst))
-                print(inst.args)
-                print(inst)
+                i = i-1
         i+=1
 
 
