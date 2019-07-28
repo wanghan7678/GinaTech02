@@ -4,6 +4,7 @@ import requests
 import urllib3
 
 import GinaTech02.Ann as ann
+import GinaTech02.Cnstock_bean as cstk
 import GinaTech02.Cnstock_dao as cdao
 import GinaTech02.Cnstock_odt as codt
 import GinaTech02.Cnstock_tushare as ctu
@@ -63,6 +64,10 @@ def insert_alldaily_oneday_cn(daystr):
 
 def insert_predictresult_us(list):
     pr_dao = dao.dao_usstock_result()
+    pr_dao.add_predict_result(list)
+
+def insert_predictresult_cn(list):
+    pr_dao = cdao.dao_cnstock_result()
     pr_dao.add_predict_result(list)
 
 def insert_alldaily_today():
@@ -130,14 +135,14 @@ def ann_predict_cn(weightfilepath):
     sym = rs[1]
     list = []
     for i in range(0, len(pred)):
-        item = stk.Usstock_annpredict()
+        item = cstk.Stock_predict()
         item.symbol = str(sym[i])
         item.trade_date = get_latestdatefromdaily_cn(item.symbol)
         item.cal_date = util.get_today_datestr()
         item.result = util.toFloat(pred[i])
         item.comment = 'GRU drop 0.4'
         list.append(item)
-        insert_predictresult_us(list)
+    insert_predictresult_cn(list)
 
 def insert_cnstocklist():
     stocklist = ctu.read_cnstocklist()

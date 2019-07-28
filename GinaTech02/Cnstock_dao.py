@@ -79,3 +79,8 @@ class cnstock_daily_dao(usdao.dao_base):
         session = super().get_session()
         result = session.query(func.max(stock.Stock_daily.trade_date)).filter(stock.Stock_daily.ts_code==symbol).scalar()
         return result
+
+class dao_cnstock_result(usdao.dao_base):
+    def add_predict_result(self, item_list):
+        print("   Insert Result...")
+        super().add_itemlist(item_list)
