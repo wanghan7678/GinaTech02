@@ -62,7 +62,7 @@ class Usstock_tech01(ModelBase):
     volume_ratio = Column(Float)
 
 class Usstock_annpredict(ModelBase):
-    __tablename__='ann_predict'
+    __tablename__='ann_predict_us'
     id = Column(Integer, primary_key=True)
     symbol = Column(String(length=45))
     trade_date=Column(DateTime)

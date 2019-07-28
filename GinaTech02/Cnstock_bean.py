@@ -35,3 +35,12 @@ class Stock_daily(ModelBase):
     turnover_rate = Column(Float)
     volume_ratio = Column(Float)
     pe = Column(Float)
+
+class Stock_predict(ModelBase):
+    __tablename__='ann_predict_cn'
+    id = Column(Integer, primary_key=True)
+    symbol = Column(String(length=45))
+    trade_date=Column(DateTime)
+    cal_date=Column(DateTime)
+    result = Column(Float)
+    comment = Column(String(length=45))
