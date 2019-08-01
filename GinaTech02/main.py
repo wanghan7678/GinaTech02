@@ -31,6 +31,6 @@ if __name__ == '__main__':
 
     print("start program...")
 
-    schedulTask()
+    #schedulTask()
 
     print("end program.")
