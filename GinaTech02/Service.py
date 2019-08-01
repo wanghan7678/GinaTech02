@@ -190,3 +190,4 @@ def insert_cnstock_all_byodt():
             print("insert %s into database..."%ts_code)
             dailydao.insert_newlist(list)
         i+=1
+
