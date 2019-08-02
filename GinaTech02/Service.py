@@ -64,11 +64,18 @@ def insert_alldaily_oneday_cn(daystr):
 
 def insert_predictresult_us(list):
     pr_dao = dao.dao_usstock_result()
-    pr_dao.add_predict_result(list)
+    for item in list:
+        print("add ")
+        to_add=[]
+        to_add.append(item)
+        pr_dao.add_predict_result(to_add)
 
 def insert_predictresult_cn(list):
     pr_dao = cdao.dao_cnstock_result()
-    pr_dao.add_predict_result(list)
+    for item in list:
+        to_add=[]
+        to_add.append(item)
+        pr_dao.add_predict_result(to_add)
 
 def insert_alldaily_today():
     todaystr = util.get_today_datestr()
