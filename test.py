@@ -1,6 +1,21 @@
-import GinaTech02.Cnstock_odt as odt
+import GinaTech02.Service as serv
+import GinaTech02.Usstock_bean as stk
 
-list = odt.read_cnstock_daily('002413.SZ', start_date='2014-04-01', end_date='2014-04-20')
+list = []
 
-for row in list:
-    print(row.trade_date)
+item = stk.Usstock_annpredict()
+item.symbol = str('PIH')
+item.trade_date = '2019-07-31'
+item.cal_date = '2019-08-02'
+item.result = 0.201436
+item.comment = "GRU drop 0.4"
+list.append(item)
+item = stk.Usstock_annpredict()
+item.symbol = str('test')
+item.trade_date = '2019-07-31'
+item.cal_date = '2019-08-02'
+item.result = 0.201436
+item.comment = "GRU drop 0.4"
+list.append(item)
+
+serv.insert_predictresult_us(list)
