@@ -5,8 +5,12 @@ import GinaTech02.Config as cfg
 import GinaTech02.Util as util
 
 TUSHARE_DAILYFIELDS='ts_code, trade_date, open, high, low, close, pct_chg, vol'
-TUSHARE_COMPNAYFIELDS='ts_code, exchange, chairman, manager, secretary, reg_capital, setup_date, province, city, introduction, website, email, office, employees, main_business, business_scope'
-TUSHARE_FINAFIELDS = 'ts_code, ann_date, end_date, eps, dt_eps, total_revenue_ps, revenue_ps, extra_item, profit_dedt, gross_margin, current_ratio, quick_ratio, cash_ratio, assets_turn, interst_income, daa, edit, editda, netdebt, bps, roe, roa, npta, debt_to_assets'
+TUSHARE_COMPNAYFIELDS='ts_code, exchange, chairman, manager, secretary, reg_capital, ' \
+                      'setup_date, province, city, introduction, website, email, office, ' \
+                      'employees, main_business, business_scope'
+TUSHARE_FINAFIELDS = 'ts_code, ann_date, end_date, eps, dt_eps, total_revenue_ps, revenue_ps, ' \
+                     'extra_item, profit_dedt, gross_margin, current_ratio, quick_ratio, cash_ratio, ' \
+                     'assets_turn, interst_income, daa, edit, editda, netdebt, bps, roe, roa, npta, debt_to_assets'
 
 def get_tushare_api():
     token = cfg.CONSTANT.Tushare_Token
@@ -110,15 +114,17 @@ def __addCompanyList(list, dataset):
         item.manager = df.iat[i,3]
         item.secretary = df.iat[i,4]
         item.re_capital = util.toFloat(df.iat[i,5])
-        item.setup_date = df.iat[i,6]
+        item.setup_date = util.date_cn2us(df.iat[i,6])
         item.province = df.iat[i,7]
         item.city = df.iat[i,8]
         item.introduction = df.iat[i,9]
         item.website = df.iat[i,10]
         item.email = df.iat[i,11]
         item.office = df.iat[i,12]
-        item.employees = util.toInt(df.iat[i,13])
-        item.main_business = df.iat[i,14]
+        #it is an problem of tushare https://github.com/waditu/tushare/issues/1111
+        item.employees = util.toInt(df.iat[i,14])
+        item.main_business = df.iat[i,13]
+        #end of the problem.
         item.business_scope = df.iat[i,15]
         list.append(item)
     return list
