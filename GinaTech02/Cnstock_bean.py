@@ -58,12 +58,12 @@ class Stock_company(ModelBase):
     province = Column(String(length=45))
     city = Column(String(length=45))
     introduction = Column(String(length=500))
-    website = Column(String(length=45))
-    email = Column(String(length=45))
-    office = Column(String(length=45))
+    website = Column(String(length=100))
+    email = Column(String(length=200))
+    office = Column(String(length=200))
     employees = Column(Integer)
-    main_business = Column(String(length=45))
-    business_scope = Column(String(length=45))
+    main_business = Column(String(length=400))
+    business_scope = Column(String(length=400))
 
 class Stock_fina(ModelBase):
     __tablename__ = 'data_cnstock_fina'
