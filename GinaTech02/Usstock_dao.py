@@ -32,7 +32,10 @@ class dao_base(object):
             print("close sql session")
             session.close()
 
-
+    def add_oneItemEachTime(self, item_list):
+        for item in item_list:
+            ls = [item]
+            self.add_itemlist(ls)
 
 
 class dao_ussstock_item(dao_base):

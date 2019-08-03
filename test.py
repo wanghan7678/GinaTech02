@@ -1,21 +1,11 @@
-import GinaTech02.Service as serv
-import GinaTech02.Usstock_bean as stk
+import tushare as ts
 
-list = []
+import GinaTech02.Config as conf
 
-item = stk.Usstock_annpredict()
-item.symbol = str('PIH')
-item.trade_date = '2019-07-31'
-item.cal_date = '2019-08-02'
-item.result = 0.201436
-item.comment = "GRU drop 0.4"
-list.append(item)
-item = stk.Usstock_annpredict()
-item.symbol = str('test')
-item.trade_date = '2019-07-31'
-item.cal_date = '2019-08-02'
-item.result = 0.201436
-item.comment = "GRU drop 0.4"
-list.append(item)
+pro = ts.pro_api(conf.CONSTANT.Tushare_Token);
 
-serv.insert_predictresult_us(list)
+
+df = pro.query('fina_indicator', ts_code='000002.SZ', start_date='20190101', end_date='20190803')
+
+print(df)
+

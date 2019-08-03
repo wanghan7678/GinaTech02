@@ -5,6 +5,8 @@ import GinaTech02.Config as cfg
 import GinaTech02.Util as util
 
 TUSHARE_DAILYFIELDS='ts_code, trade_date, open, high, low, close, pct_chg, vol'
+TUSHARE_COMPNAYFIELDS='ts_code, exchange, chairman, manager, secretary, reg_capital, setup_date, province, city, introduction, website, email, office, employees, main_business, business_scope'
+TUSHARE_FINAFIELDS = 'ts_code, ann_date, end_date, eps, dt_eps, total_revenue_ps, revenue_ps, extra_item, profit_dedt, gross_margin, current_ratio, quick_ratio, cash_ratio, assets_turn, interst_income, daa, edit, editda, netdebt, bps, roe, roa, npta, debt_to_assets'
 
 def get_tushare_api():
     token = cfg.CONSTANT.Tushare_Token
@@ -98,3 +100,68 @@ def read_cnstock_dailyandbasic(ts_code, start_date, end_date):
     list = update_cnstock_basic(list, ts_code, start_date, end_date)
     return list
 
+def __addCompanyList(list, dataset):
+    df = dataset
+    for i in range(0, len(df)):
+        item = stock.Stock_company()
+        item.ts_code = df.iat[i,0]
+        item.exchange = df.iat[i,1]
+        item.chairman = df.iat[i,2]
+        item.manager = df.iat[i,3]
+        item.secretary = df.iat[i,4]
+        item.re_capital = util.toFloat(df.iat[i,5])
+        item.setup_date = df.iat[i,6]
+        item.province = df.iat[i,7]
+        item.city = df.iat[i,8]
+        item.introduction = df.iat[i,9]
+        item.website = df.iat[i,10]
+        item.email = df.iat[i,11]
+        item.office = df.iat[i,12]
+        item.employees = util.toInt(df.iat[i,13])
+        item.main_business = df.iat[i,14]
+        item.business_scope = df.iat[i,15]
+        list.append(item)
+    return list
+
+def read_cnstock_company():
+    pro = get_tushare_api()
+    df = pro.stock_company(exchange='SZSE', fields=TUSHARE_COMPNAYFIELDS)
+    list = []
+    list = __addCompanyList(list, df)
+    df = pro.stock_company(exchange="SSE",  fields=TUSHARE_COMPNAYFIELDS)
+    list = __addCompanyList(list, df)
+    return list
+
+def read_cnstock_fina(ts_code_list, end_date_cnstr):
+    pro = get_tushare_api()
+    list = []
+    for ts_code in ts_code_list:
+        df = pro.query('fina_indicator', ts_code=ts_code, start_date='20190101', end_date=end_date_cnstr, fields=TUSHARE_FINAFIELDS)
+        for i in range(0, len(df)):
+            item = stock.Stock_fina()
+            item.ts_code = df.iat[i,0]
+            item.ann_date = util.date_cn2us(df.iat[i,1])
+            item.end_date = util.date_cn2us(df.iat[i,2])
+            item.eps = util.toFloat(df.iat[i,3])
+            item.dt_eps = util.toFloat(df.iat[i, 4])
+            item.total_revenue_ps = util.toFloat(df.iat[i, 5])
+            item.revenue_ps = util.toFloat(df.iat[i, 6])
+            item.extra_item = util.toFloat(df.iat[i, 7])
+            item.profit_dedt = util.toFloat(df.iat[i, 8])
+            item.gross_margin = util.toFloat(df.iat[i, 9])
+            item.current_ratio = util.toFloat(df.iat[i, 10])
+            item.quick_ratio = util.toFloat(df.iat[i, 11])
+            item.cash_ratio = util.toFloat(df.iat[i, 12])
+            item.assets_turn = util.toFloat(df.iat[i, 13])
+            item.interst_income = util.toFloat(df.iat[i, 14])
+            item.daa = util.toFloat(df.iat[i, 15])
+            item.edit = util.toFloat(df.iat[i, 16])
+            item.editda = util.toFloat(df.iat[i, 17])
+            item.netdebt = util.toFloat(df.iat[i, 18])
+            item.bps = util.toFloat(df.iat[i, 19])
+            item.roe = util.toFloat(df.iat[i, 20])
+            item.roa = util.toFloat(df.iat[i, 21])
+            item.npta = util.toFloat(df.iat[i, 22])
+            item.debt_to_assets = util.toFloat(df.iat[i, 23])
+            list.append(item)
+    return list
