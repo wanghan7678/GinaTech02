@@ -1,11 +1,11 @@
-import tushare as ts
+import GinaTech02.Cnstock_tushare as ts
+fstr = 'ts_code, employees, main_business, business_scope'
+pro = ts.get_tushare_api()
+df = pro.stock_company(exchange='SSE', fields=fstr)
 
-import GinaTech02.Config as conf
+print(df.iat[1,0])
+print(df.iat[1,1])
+print(df.iat[1,2])
+print(df.iat[1,3])
 
-pro = ts.pro_api(conf.CONSTANT.Tushare_Token);
-
-
-df = pro.query('fina_indicator', ts_code='000002.SZ', start_date='20190101', end_date='20190803')
-
-print(df)
 

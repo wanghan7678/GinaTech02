@@ -54,7 +54,7 @@ class Stock_company(ModelBase):
     manager = Column(String(length=45))
     secretary = Column(String(length=45))
     re_capital = Column(Float)
-    setup_date = Column(String(length=45))
+    setup_date = Column(DateTime)
     province = Column(String(length=45))
     city = Column(String(length=45))
     introduction = Column(String(length=500))
