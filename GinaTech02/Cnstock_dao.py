@@ -84,3 +84,13 @@ class dao_cnstock_result(usdao.dao_base):
     def add_predict_result(self, item_list):
         print("   Insert Result...")
         super().add_itemlist(item_list)
+
+class dao_cnstock_company(usdao.dao_base):
+    def add_cnstock_company(self, item_list):
+        print("  Insert company...")
+        super().add_oneItemEachTime(item_list)
+
+class dao_cnstock_fina(usdao.dao_base):
+    def add_cnstock_fina(self, item_list):
+        print("  Insert financial indicators...")
+        super().add_oneItemEachTime(item_list)

@@ -198,3 +198,16 @@ def insert_cnstock_all_byodt():
             dailydao.insert_newlist(list)
         i+=1
 
+def insert_cnstock_compnay():
+    company_dao = cdao.dao_cnstock_company()
+    company_ts = ctu.read_cnstock_company()
+    company_dao.add_cnstock_company(company_ts)
+
+def insert_cnstock_fina():
+    daystr = util.get_today_datestr()
+    cndaystr = util.date_us2cn(daystr)
+    stkdao = cdao.cnstock_item_dao()
+    stocklist = stkdao.get_all_tscode()
+    list = ctu.read_cnstock_fina(stocklist, cndaystr)
+    fina_dao = cdao.dao_cnstock_fina()
+    fina_dao.add_oneItemEachTime(list)
