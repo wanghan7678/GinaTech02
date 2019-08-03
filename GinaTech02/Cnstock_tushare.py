@@ -125,9 +125,11 @@ def __addCompanyList(list, dataset):
 
 def read_cnstock_company():
     pro = get_tushare_api()
+    print("reading SZSE company information from tushare.")
     df = pro.stock_company(exchange='SZSE', fields=TUSHARE_COMPNAYFIELDS)
     list = []
     list = __addCompanyList(list, df)
+    print("reading SSE company information from tushare.")
     df = pro.stock_company(exchange="SSE",  fields=TUSHARE_COMPNAYFIELDS)
     list = __addCompanyList(list, df)
     return list
@@ -136,7 +138,9 @@ def read_cnstock_fina(ts_code_list, end_date_cnstr):
     pro = get_tushare_api()
     list = []
     for ts_code in ts_code_list:
-        df = pro.query('fina_indicator', ts_code=ts_code, start_date='20190101', end_date=end_date_cnstr, fields=TUSHARE_FINAFIELDS)
+        print("reading %s financial indicators from tushare." %ts_code)
+        df = pro.query('fina_indicator', ts_code=ts_code, start_date='20190101', end_date=end_date_cnstr,
+                       fields=TUSHARE_FINAFIELDS)
         for i in range(0, len(df)):
             item = stock.Stock_fina()
             item.ts_code = df.iat[i,0]
