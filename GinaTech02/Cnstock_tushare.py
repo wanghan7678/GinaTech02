@@ -175,3 +175,38 @@ def read_cnstock_fina(ts_code_list, end_date_cnstr):
             item.debt_to_assets = util.toFloat(df.iat[i, 23])
             list.append(item)
     return list
+
+def read_cnstock_finaone(ts_code, endday_cnstr):
+    pro = get_tushare_api()
+    print("reading %s financial indicators from Tushare. " %ts_code)
+    df = pro.query('fina_indicator', ts_code=ts_code, start_date='20190101', end_date=endday_cnstr,
+                   fields=TUSHARE_FINAFIELDS)
+    list=[]
+    for i in range(0, len(df)):
+        item = stock.Stock_fina()
+        item.ts_code = df.iat[i,0]
+        item.ann_date = util.date_cn2us(df.iat[i,1])
+        item.end_date = util.date_cn2us(df.iat[i,2])
+        item.eps = util.toFloat(df.iat[i,3])
+        item.dt_eps = util.toFloat(df.iat[i, 4])
+        item.total_revenue_ps = util.toFloat(df.iat[i, 5])
+        item.revenue_ps = util.toFloat(df.iat[i, 6])
+        item.extra_item = util.toFloat(df.iat[i, 7])
+        item.profit_dedt = util.toFloat(df.iat[i, 8])
+        item.gross_margin = util.toFloat(df.iat[i, 9])
+        item.current_ratio = util.toFloat(df.iat[i, 10])
+        item.quick_ratio = util.toFloat(df.iat[i, 11])
+        item.cash_ratio = util.toFloat(df.iat[i, 12])
+        item.assets_turn = util.toFloat(df.iat[i, 13])
+        item.interst_income = util.toFloat(df.iat[i, 14])
+        item.daa = util.toFloat(df.iat[i, 15])
+        item.edit = util.toFloat(df.iat[i, 16])
+        item.editda = util.toFloat(df.iat[i, 17])
+        item.netdebt = util.toFloat(df.iat[i, 18])
+        item.bps = util.toFloat(df.iat[i, 19])
+        item.roe = util.toFloat(df.iat[i, 20])
+        item.roa = util.toFloat(df.iat[i, 21])
+        item.npta = util.toFloat(df.iat[i, 22])
+        item.debt_to_assets = util.toFloat(df.iat[i, 23])
+        list.append(item)
+    return list

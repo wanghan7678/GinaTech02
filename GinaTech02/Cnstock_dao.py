@@ -94,3 +94,12 @@ class dao_cnstock_fina(usdao.dao_base):
     def add_cnstock_fina(self, item_list):
         print("  Insert financial indicators...")
         super().add_oneItemEachTime(item_list)
+
+    def get_existing_tscodelist(self):
+        session = super().get_session()
+        result = session.query(stock.Stock_fina.ts_code).distinct(stock.Stock_daily.ts_code).all()
+        list = []
+        for row in result:
+            list.append(row.ts_code)
+        session.close()
+        return list

@@ -211,3 +211,16 @@ def insert_cnstock_fina():
     list = ctu.read_cnstock_fina(stocklist, cndaystr)
     fina_dao = cdao.dao_cnstock_fina()
     fina_dao.add_oneItemEachTime(list)
+
+def insert_cnstock_fina2():
+    daystr = util.get_today_datestr()
+    cndaystr = util.date_us2cn(daystr)
+    stkdao = cdao.cnstock_item_dao()
+    sfadao = cdao.dao_cnstock_fina()
+    stocklist = stkdao.get_all_tscode()
+    existinglist = sfadao.get_existing_tscodelist()
+    for ts_code in stocklist:
+        ts_code = ts_code.strip()
+        if ts_code not in existinglist:
+            list = ctu.read_cnstock_finaone(ts_code, cndaystr)
+            sfadao.add_cnstock_fina(list)
