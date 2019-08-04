@@ -62,7 +62,7 @@ class Stock_company(ModelBase):
     email = Column(String(length=200))
     office = Column(String(length=200))
     employees = Column(Integer)
-    main_business = Column(String(length=700))
+    main_business = Column(String(length=900))
     business_scope = Column(String(length=400))
 
 class Stock_fina(ModelBase):
