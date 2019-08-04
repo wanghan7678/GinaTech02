@@ -10,7 +10,7 @@ TUSHARE_COMPNAYFIELDS='ts_code, exchange, chairman, manager, secretary, reg_capi
                       'employees, main_business, business_scope'
 TUSHARE_FINAFIELDS = 'ts_code, ann_date, end_date, eps, dt_eps, total_revenue_ps, revenue_ps, ' \
                      'extra_item, profit_dedt, gross_margin, current_ratio, quick_ratio, cash_ratio, ' \
-                     'assets_turn, interst_income, daa, edit, editda, netdebt, bps, roe, roa, npta, debt_to_assets'
+                     'assets_turn, interst_income, daa, ebit, ebitda, netdebt, bps, roe, roa, npta, debt_to_assets'
 
 def get_tushare_api():
     token = cfg.CONSTANT.Tushare_Token
