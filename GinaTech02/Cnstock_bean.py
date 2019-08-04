@@ -57,12 +57,12 @@ class Stock_company(ModelBase):
     setup_date = Column(DateTime)
     province = Column(String(length=45))
     city = Column(String(length=45))
-    introduction = Column(String(length=500))
+    introduction = Column(String(length=800))
     website = Column(String(length=100))
     email = Column(String(length=200))
     office = Column(String(length=200))
     employees = Column(Integer)
-    main_business = Column(String(length=500))
+    main_business = Column(String(length=700))
     business_scope = Column(String(length=400))
 
 class Stock_fina(ModelBase):
