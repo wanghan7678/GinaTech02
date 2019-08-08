@@ -219,6 +219,7 @@ def insert_cnstock_fina2():
     sfadao = cdao.dao_cnstock_fina()
     stocklist = stkdao.get_all_tscode()
     existinglist = sfadao.get_existing_tscodelist()
+    print('start fina2 insert...')
     for ts_code in stocklist:
         ts_code = ts_code.strip()
         if ts_code not in existinglist:
@@ -230,5 +231,6 @@ def insert_usstock_company():
     stkdao = dao.dao_ussstock_item()
     stocklist = stkdao.get_all_symbols()
     for symbol in stocklist:
-        item = odt.get_oneCompany()
-        uscompany_dao.add_usstock_company(item)
+        item = odt.get_oneCompany(symbol)
+        list = [item]
+        uscompany_dao.add_usstock_company(list)

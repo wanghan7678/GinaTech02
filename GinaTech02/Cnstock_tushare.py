@@ -123,7 +123,8 @@ def __addCompanyList(list, dataset):
         item.office = df.iat[i,12]
         #it is an problem of tushare https://github.com/waditu/tushare/issues/1111
         item.employees = util.toInt(df.iat[i,14])
-        item.main_business = df.iat[i,13]
+        #item.main_business = df.iat[i,13]
+        item.main_business="-"
         #end of the problem.
         item.business_scope = df.iat[i,15]
         list.append(item)
@@ -165,8 +166,8 @@ def read_cnstock_fina(ts_code_list, end_date_cnstr):
             item.assets_turn = util.toFloat(df.iat[i, 13])
             item.interst_income = util.toFloat(df.iat[i, 14])
             item.daa = util.toFloat(df.iat[i, 15])
-            item.edit = util.toFloat(df.iat[i, 16])
-            item.editda = util.toFloat(df.iat[i, 17])
+            item.ebit = util.toFloat(df.iat[i, 16])
+            item.ebitda = util.toFloat(df.iat[i, 17])
             item.netdebt = util.toFloat(df.iat[i, 18])
             item.bps = util.toFloat(df.iat[i, 19])
             item.roe = util.toFloat(df.iat[i, 20])
@@ -179,7 +180,7 @@ def read_cnstock_fina(ts_code_list, end_date_cnstr):
 def read_cnstock_finaone(ts_code, endday_cnstr):
     pro = get_tushare_api()
     print("reading %s financial indicators from Tushare. " %ts_code)
-    df = pro.query('fina_indicator', ts_code=ts_code, start_date='20190101', end_date=endday_cnstr,
+    df = pro.query('fina_indicator', ts_code=ts_code, start_date='20170101', end_date=endday_cnstr,
                    fields=TUSHARE_FINAFIELDS)
     list=[]
     for i in range(0, len(df)):
