@@ -73,3 +73,16 @@ def get_onedaily(symbol, trade_date):
         list.append(item)
     print("read data...%s"%(symbol+str(trade_date)))
     return list
+
+def get_oneCompany(symbol):
+    client = get_TiingoClient()
+    meta = client.get_ticker_metadata(symbol)
+    item = stock.Usstock_company()
+    item.symbol = meta['ticker']
+    item.exchange_code = meta['exchangeCode']
+    item.name = meta['name']
+    item.description = meta['description']
+    item.start_date = meta['startDate']
+    item.end_date = meta['endDate']
+    print("read company information...%s"%(item.symbol))
+    return item;

@@ -30,7 +30,9 @@ def schedulTask():
 if __name__ == '__main__':
 
     print("start program...")
-
+    #serv.insert_alldaily_oneday_cn('2019-08-05')
+    #serv.ann_predict_cn('cn_2019-08-03_weight.h5')
     #schedulTask()
+    serv.insert_cnstock_compnay()
 
     print("end program.")

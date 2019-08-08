@@ -135,3 +135,9 @@ class dao_usstock_result(dao_base):
     def add_predict_result(self, item_list):
         print("   Insert Result...")
         super().add_itemlist(item_list)
+
+
+class dao_usstock_company(dao_base):
+    def add_usstock_company(self, item_list):
+        print("   Insert Company Info...")
+        super().add_itemlist(item_list)

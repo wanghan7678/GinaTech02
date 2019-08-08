@@ -224,3 +224,11 @@ def insert_cnstock_fina2():
         if ts_code not in existinglist:
             list = ctu.read_cnstock_finaone(ts_code, cndaystr)
             sfadao.add_cnstock_fina(list)
+
+def insert_usstock_company():
+    uscompany_dao = dao.dao_usstock_company()
+    stkdao = dao.dao_ussstock_item()
+    stocklist = stkdao.get_all_symbols()
+    for symbol in stocklist:
+        item = odt.get_oneCompany()
+        uscompany_dao.add_usstock_company(item)

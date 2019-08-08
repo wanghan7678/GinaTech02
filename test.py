@@ -1,11 +1,11 @@
-import GinaTech02.Cnstock_tushare as ts
-fstr = 'ts_code, employees, main_business, business_scope'
-pro = ts.get_tushare_api()
-df = pro.stock_company(exchange='SSE', fields=fstr)
+import GinaTech02.Usstock_odt as odt;
 
-print(df.iat[1,0])
-print(df.iat[1,1])
-print(df.iat[1,2])
-print(df.iat[1,3])
+client = odt.get_TiingoClient()
 
+met = client.get_ticker_metadata("AAPL")
 
+#msft = yf.Ticker("AAPL")
+
+#df = msft.financials
+print(type(met))
+print(met)
