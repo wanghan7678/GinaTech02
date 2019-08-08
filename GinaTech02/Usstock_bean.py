@@ -69,3 +69,13 @@ class Usstock_annpredict(ModelBase):
     cal_date=Column(DateTime)
     result = Column(Float)
     comment = Column(String(length=45))
+
+class Usstock_company(ModelBase):
+    __tablename__ = 'data_usstock_company'
+    id = Column(Integer, primary_key=True)
+    symbol = Column(String(length=45))
+    name =  Column(String(length=45))
+    exchange_code =  Column(String(length=45))
+    description =  Column(String(length=1200))
+    end_date = Column(DateTime)
+    start_date = Column(DateTime)
