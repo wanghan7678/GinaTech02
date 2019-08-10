@@ -249,4 +249,5 @@ def insert_usstock_fina():
                 list = odt.get_oneFina(symbol)
                 usfina_dao.add_usstock_fina(list)
             except Exception as err:
-                print("error...  skipped  %s" % err)
+                print("error...  skipped  %s" %symbol)
+                print("exception: %s" %err)

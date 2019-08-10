@@ -91,12 +91,13 @@ def get_oneCompany(symbol):
 def get_oneFina(symbol):
     client = get_TiingoClient()
     tk = yf.Ticker(symbol)
-    item = stock.Usstock_fina()
+    print(symbol)
     df = tk.financials
     nc = len(df.columns)
     rows, cols = df.shape
     list = []
     for i in range(0, nc):
+        item = stock.Usstock_fina()
         item.end_date = util.date_yf2us(df.columns.values[i])
         item.symbol = symbol
         item.total_rev = util.toFloat(df.iat[0, i])
@@ -106,7 +107,6 @@ def get_oneFina(symbol):
         item.r_n_d = util.toFloat(df.iat[4,i])
         item.selling_ga = util.toFloat(df.iat[5,i])
         item.non_rec = util.toFloat(df.iat[6,i])
-
         item.others = util.toFloat(df.iat[7,i])
         item.total_ops = util.toFloat(df.iat[8,i])
         item.ops_il = util.toFloat(df.iat[9,i])
@@ -117,7 +117,6 @@ def get_oneFina(symbol):
         item.income_before_tax = util.toFloat(df.iat[14,i])
         item.income_tax_expense = util.toFloat(df.iat[15,i])
         item.min_int = util.toFloat(df.iat[16,i])
-
         item.net_income_cs  = util.toFloat(df.iat[17,i])
         item.disc_ops = util.toFloat(df.iat[19,i])
         item.extra_items = util.toFloat(df.iat[20,i])

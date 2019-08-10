@@ -9,6 +9,8 @@ def toFloat(input):
     a = 0
     if input is None:
         return 0
+    if input == '-':
+        return -1;
     else:
         try:
             a = float(np.nan_to_num(input))

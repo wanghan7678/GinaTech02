@@ -144,7 +144,7 @@ class dao_usstock_company(dao_base):
 
 class dao_usstock_fina(dao_base):
     def add_usstock_fina(self, item_list):
-        print("   Insert company fina...")
+        print("   Insert company fina...: size of list: %d"%len(item_list))
         super().add_itemlist(item_list)
 
     def get_allsymbollist(self):
