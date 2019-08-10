@@ -231,6 +231,23 @@ def insert_usstock_company():
     stkdao = dao.dao_ussstock_item()
     stocklist = stkdao.get_all_symbols()
     for symbol in stocklist:
-        item = odt.get_oneCompany(symbol)
-        list = [item]
-        uscompany_dao.add_usstock_company(list)
+        try:
+            item = odt.get_oneCompany(symbol)
+            list = [item]
+            uscompany_dao.add_usstock_company(list)
+        except Exception as err:
+            print("error...  skipped  %s" %err)
+
+def insert_usstock_fina():
+    stkdao = dao.dao_ussstock_item()
+    stocklist = stkdao.get_all_symbols()
+    usfina_dao = dao.dao_usstock_fina()
+    existinglist = usfina_dao.get_allsymbollist()
+    for symbol in stocklist:
+        if symbol not in existinglist:
+            try:
+                item = odt.get_oneFina(symbol)
+                list = [item]
+                usfina_dao.add_usstock_fina(list)
+            except Exception as err:
+                print("error...  skipped  %s" % err)

@@ -1,11 +1,15 @@
-import GinaTech02.Usstock_odt as odt;
+import yfinance as yf
 
-client = odt.get_TiingoClient()
+msft = yf.Ticker("AAPL")
 
-met = client.get_ticker_metadata("AAPL")
+df = msft.balance_sheet
 
-#msft = yf.Ticker("AAPL")
+col = df.columns.values
+index = df.index.values;
 
-#df = msft.financials
-print(type(met))
-print(met)
+print(col)
+print(index)
+
+print(df.shape)
+
+print(df)

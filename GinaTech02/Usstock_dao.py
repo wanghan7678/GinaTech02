@@ -141,3 +141,17 @@ class dao_usstock_company(dao_base):
     def add_usstock_company(self, item_list):
         print("   Insert Company Info...")
         super().add_itemlist(item_list)
+
+class dao_usstock_fina(dao_base):
+    def add_usstock_fina(self, item_list):
+        print("   Insert company fina...")
+        super().add_itemlist(item_list)
+
+    def get_allsymbollist(self):
+        session = super().get_session()
+        result = session.query(stock.Usstock_fina).distinct(stock.Usstock_fina.symbol)
+        list = []
+        for row in result:
+            list.append(row.symbol)
+        session.close()
+        return list
