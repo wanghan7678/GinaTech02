@@ -14,6 +14,7 @@ class CONSTANT(object):
     DATASIZE=1200
     DATE_FORMAT_US="%Y-%m-%d"
     DATE_FORMAT_CN="%Y%m%d"
+    DATE_FORMAT_YF="%m/%d/%Y"
     WEIGHTS_FILEPATH='weight.h5'
 
 

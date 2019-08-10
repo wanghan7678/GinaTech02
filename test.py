@@ -1,15 +1,11 @@
 import yfinance as yf
 
-msft = yf.Ticker("AAPL")
+msft = yf.Ticker("MSFT")
 
-df = msft.balance_sheet
+df = msft.financials
 
 col = df.columns.values
 index = df.index.values;
 
-print(col)
-print(index)
-
-print(df.shape)
-
-print(df)
+print(type(col))
+print(col[0])

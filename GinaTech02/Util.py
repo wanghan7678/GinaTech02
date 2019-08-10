@@ -65,3 +65,8 @@ def date_us2cn(datestr):
     dt = datetime.datetime.strptime(datestr, cfg.CONSTANT.DATE_FORMAT_US)
     d = dt.strftime(cfg.CONSTANT.DATE_FORMAT_CN)
     return d
+
+def date_yf2us(datestr):
+    dt = datetime.datetime.strptime(datestr, cfg.CONSTANT.DATE_FORMAT_YF)
+    d = dt.strftime(cfg.CONSTANT.DATE_FORMAT_US)
+    return d
