@@ -96,7 +96,7 @@ def get_oneFina(symbol):
     nc = len(df.columns)
     rows, cols = df.shape
     list = []
-    for i in range(0, cols):
+    for i in range(0, nc):
         item.end_date = util.date_yf2us(df.columns.values[i])
         item.symbol = symbol
         item.total_rev = util.toFloat(df.iat[0, i])
