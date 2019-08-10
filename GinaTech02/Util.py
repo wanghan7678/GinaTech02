@@ -15,6 +15,7 @@ def toFloat(input):
         except Exception as err:
             print("input is %s"%str(input))
             print("number to float exception: %s" %str(err))
+            a = -1
         return a
 
 def toInt(input):
