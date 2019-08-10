@@ -246,8 +246,7 @@ def insert_usstock_fina():
     for symbol in stocklist:
         if symbol not in existinglist:
             try:
-                item = odt.get_oneFina(symbol)
-                list = [item]
+                list = odt.get_oneFina(symbol)
                 usfina_dao.add_usstock_fina(list)
             except Exception as err:
                 print("error...  skipped  %s" % err)

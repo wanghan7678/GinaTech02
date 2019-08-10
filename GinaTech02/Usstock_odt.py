@@ -95,6 +95,7 @@ def get_oneFina(symbol):
     df = tk.financials
     nc = len(df.columns)
     rows, cols = df.shape
+    list = []
     for i in range(0, cols):
         item.end_date = util.date_yf2us(df.columns.values[i])
         item.symbol = symbol
@@ -125,5 +126,6 @@ def get_oneFina(symbol):
         item.net_income = util.toFloat(df.iat[23,i])
         item.pre_stk = util.toFloat(df.iat[25,i])
         item.net_income_to_cs = util.toFloat(df.iat[26, i])
-    return item
+        list.append(item)
+    return list
 
