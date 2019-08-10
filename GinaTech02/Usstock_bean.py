@@ -94,7 +94,7 @@ class Usstock_fina(ModelBase):
     non_rec = Column(Float)
     others = Column(Float)
     total_ops = Column(Float)
-    ops_li = Column(Float)
+    ops_il = Column(Float)
     income_cops = Column(Float)
     total_other = Column(Float)
     ebit = Column(Float)

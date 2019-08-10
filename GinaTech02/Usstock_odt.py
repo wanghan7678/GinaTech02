@@ -105,7 +105,7 @@ def get_oneFina(symbol):
         item.non_rec = util.toFloat(df.iat[5,i])
         item.others = util.toFloat(df.iat[6,i])
         item.total_ops = util.toFloat(df.iat[7,i])
-        item.ops_li = util.toFloat(df.iat[8,i])
+        item.ops_il = util.toFloat(df.iat[8,i])
         item.income_cops = util.toFloat(df.iat[9,i])
         item.total_other = util.toFloat(df.iat[10,i])
         item.ebit = util.toFloat(df.iat[11,i])
