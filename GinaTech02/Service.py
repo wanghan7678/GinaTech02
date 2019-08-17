@@ -100,6 +100,13 @@ def ann_training_us_wweight(weightfilepath):
     ann.save_model2(model, filename="us")
     ann.draw_plot(history)
 
+def ann_training_us_wmodel(modelfilepath):
+    ann.train_frommodel_us(modelfilepath)
+
+def ann_training_cn_wmodel(modelfilepath):
+    ann.train_frommodel_cn(modelfilepath)
+
+
 def ann_training_cn_wweight(weightfilepath):
     model = ann.create_gru_model()
     model.load_weights(weightfilepath)

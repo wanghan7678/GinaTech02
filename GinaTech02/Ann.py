@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from keras import layers
 from keras.models import Sequential
+from keras.models import load_model
 from keras.optimizers import RMSprop
 
 import GinaTech02.Config as cfig
@@ -37,6 +38,21 @@ def train_model_cn(model):
     his = train_model(model, train_gen=dg.train_gen_cn, val_gen=dg.val_gen_cn)
     return his
 
+def train_frommodel_cn(modelfilepath):
+    model = create_gru_model()
+    del model
+    model = load_model(modelfilepath)
+    history = train_model_cn(model)
+    save_model2(model, filename="cn")
+    draw_plot(history)
+
+def train_frommodel_us(modelfilepath):
+    model = create_gru_model()
+    del model
+    model = load_model(modelfilepath)
+    history = train_model_us(model)
+    save_model2(model, filename="us")
+    draw_plot(history)
 
 def draw_plot(history):
     loss = history.history['loss']
