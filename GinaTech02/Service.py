@@ -124,9 +124,10 @@ def get_latestdatefromdaily_cn(symbol):
     return dt
 
 #predict the latest
-def ann_predict_us(weightfilepath):
-    model = ann.create_gru_model()
-    model.load_weights(weightfilepath)
+def ann_predict_us(filepath):
+    #model = ann.create_gru_model()
+    #model.load_weights(filepath)
+    model = ann.load_mymodel(filepath)
     rs = ann.predict_model_us(model)
     pred = rs[0]
     sym = rs[1]
@@ -141,9 +142,10 @@ def ann_predict_us(weightfilepath):
         list.append(item)
     insert_predictresult_us(list)
 
-def ann_predict_cn(weightfilepath):
-    model = ann.create_gru_model()
-    model.load_weights(weightfilepath)
+def ann_predict_cn(filepath):
+    #model = ann.create_gru_model()
+    #model.load_weights(filepath)
+    model = ann.load_mymodel(filepath)
     rs = ann.predict_model_cn(model)
     pred = rs[0]
     sym = rs[1]

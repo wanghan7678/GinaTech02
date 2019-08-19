@@ -22,6 +22,12 @@ def create_gru_model():
     model.compile(optimizer=RMSprop(),loss='binary_crossentropy')
     return model
 
+def load_mymodel(filepath):
+    model = create_gru_model()
+    del model
+    model = load_model(filepath)
+    return model
+
 def train_model(model, train_gen, val_gen):
     history = model.fit_generator(train_gen,steps_per_epoch=300,
                                   epochs=20,
